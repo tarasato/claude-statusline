@@ -54,6 +54,18 @@ def git_info(cwd):
         return None
 
 
+def countdown(secs):
+    secs = max(0, int(secs))
+    d, secs = divmod(secs, 86400)
+    h, secs = divmod(secs, 3600)
+    m, s = divmod(secs, 60)
+    if d:
+        return f"{d}d {h:02d}h {m:02d}m {s:02d}s"
+    if h:
+        return f"{h}h {m:02d}m {s:02d}s"
+    return f"{m}m {s:02d}s"
+
+
 def limit(label, window):
     pct = get(window, "used_percentage")
     if pct is None:
@@ -62,7 +74,8 @@ def limit(label, window):
     resets = get(window, "resets_at")
     if resets:
         fmt = "%H:%M" if label == "5h" else "%a %d"
-        text += f" {DIM}↻ {time.strftime(fmt, time.localtime(resets))}{RESET}"
+        left = countdown(resets - time.time())
+        text += f" {DIM}↻ {time.strftime(fmt, time.localtime(resets))} ({left}){RESET}"
     return text
 
 

@@ -21,7 +21,8 @@ if os.path.exists(path):
     shutil.copy2(path, path + ".bak")
     print(f"backup: {path}.bak")
 
-settings["statusLine"] = {"type": "command", "command": command}
+# refreshInterval: re-run every second so the reset countdown keeps ticking while idle
+settings["statusLine"] = {"type": "command", "command": command, "refreshInterval": 1}
 
 with open(path, "w", encoding="utf-8") as f:
     json.dump(settings, f, indent=2, ensure_ascii=False)

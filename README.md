@@ -4,11 +4,11 @@
 
 ```
 common · main* · Opus 5.5 (high) · fast
-ctx ▓▓▓▓░░░░░░ 43% (85k/200k) · 5h 84% ↻ 14:33 · 7d 41% ↻ Sat 31 · $1.23 · 1h15m · +156/-23
+ctx ▓▓▓▓░░░░░░ 43% (85k/200k) · 5h 84% ↻ 14:33 (2h 13m 05s) · 7d 41% ↻ Sat 31 (2d 04h 13m 05s) · $1.23 · 1h15m · +156/-23
 ```
 
 - บรรทัด 1: โฟลเดอร์ · git branch (`*` = มีไฟล์ที่ยังไม่ commit) · model (effort) · fast mode · ชื่อ agent · vim mode
-- บรรทัด 2: context ที่ใช้ (เขียว < 50% · เหลือง < 80% · แดง) · โควตา 5 ชั่วโมง / 7 วัน + เวลารีเซ็ต · ค่าใช้จ่าย · เวลา · บรรทัดที่แก้
+- บรรทัด 2: context ที่ใช้ (เขียว < 50% · เหลือง < 80% · แดง) · โควตา 5 ชั่วโมง / 7 วัน + เวลารีเซ็ต (เวลาที่เหลือ วัน/ชั่วโมง/นาที/วินาที) · ค่าใช้จ่าย · เวลา · บรรทัดที่แก้
 - โควตา 5h/7d ขึ้นเฉพาะแพ็กเกจ Pro / Max / Ultra และหลัง Claude ตอบครั้งแรกใน session
 
 ## ติดตั้งบนเครื่องใหม่
@@ -28,7 +28,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -File install.ps1
 ตัวติดตั้งจะ:
 1. หา Python ของเครื่องนั้น (บน Windows ข้าม python stub ของ Microsoft Store)
 2. คัดลอก `statusline.py` ไปที่ `~/.claude/`
-3. ใส่ `statusLine` ลงใน `~/.claude/settings.json` โดย **เก็บการตั้งค่าอื่นไว้ครบ** และสำรองไฟล์เดิมเป็น `settings.json.bak`
+3. ใส่ `statusLine` (พร้อม `refreshInterval: 1` ให้นับถอยหลังทุกวินาที) ลงใน `~/.claude/settings.json` โดย **เก็บการตั้งค่าอื่นไว้ครบ** และสำรองไฟล์เดิมเป็น `settings.json.bak`
 
 รันซ้ำได้ (ใช้ตอนอัปเดต script ด้วย) · status line ขึ้นเมื่อ Claude Code รีเฟรชหน้าจอครั้งถัดไป หรือเปิดใหม่
 
@@ -43,7 +43,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -File install.ps1
    ```json
    "statusLine": {
      "type": "command",
-     "command": "python3 ~/.claude/statusline.py"
+     "command": "python3 ~/.claude/statusline.py",
+     "refreshInterval": 1
    }
    ```
 
@@ -51,10 +52,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -File install.ps1
    ```json
    "statusLine": {
      "type": "command",
-     "command": "python ~/.claude/statusline.py"
+     "command": "python ~/.claude/statusline.py",
+     "refreshInterval": 1
    }
    ```
    ถ้าไม่ขึ้น ให้ใส่ path เต็มของ Python แทน เช่น `C:/Python315/python.exe C:/Users/<user>/.claude/statusline.py` (หา path ด้วย `where python` แล้วเลือกตัวที่ **ไม่ใช่** `...\WindowsApps\python.exe` ซึ่งเป็นตัวปลอมของ Microsoft Store)
+
+   `refreshInterval` = รันซ้ำทุกกี่วินาที (ต่ำสุด 1) ทำให้เวลาที่เหลือนับถอยหลังแม้ไม่ได้พิมพ์อะไร · ไม่ใส่ก็ได้ แต่ตัวเลขจะขยับเฉพาะตอนมี event (ส่งข้อความ / Claude ตอบ)
 
 3. ระวัง comma: `statusLine` ต้องคั่นกับ key อื่นด้วย `,` — ตรวจว่า JSON ถูกด้วย `python -m json.tool ~/.claude/settings.json`
 
